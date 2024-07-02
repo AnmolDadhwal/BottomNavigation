@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
 import com.task.bottomnavigation.databinding.FragmentFirstBinding
 import com.task.bottomnavigation.databinding.FragmentSecondBinding
 
@@ -24,8 +27,13 @@ class SecondFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     var binding: FragmentSecondBinding?=null
+    var mainActivity: MainActivity?=null
+    lateinit var spinnerAdapter: ArrayAdapter<Info>
+    val min=1
+    val max=binding?.tvValue?.text.toString()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivity=activity as MainActivity
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -38,19 +46,36 @@ class SecondFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding=FragmentSecondBinding.inflate(layoutInflater)
+        spinnerAdapter = ArrayAdapter(mainActivity!!, android.R.layout.simple_list_item_1,mainActivity!!.infoList)
+        binding?.spDynamic?.adapter=spinnerAdapter
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.btnMinus?.setOnClickListener {
-            binding?.tvValue?.setText("${binding?.tvValue?.text?.toString()?.toInt()?.minus(1)}"<binding?.)
+        binding?.spDynamic?.onItemSelectedListener=object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                binding?.tvValue?.setText("${mainActivity!!.infoList[position].number}")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
         }
-        binding?.btnPlus?.setOnClickListener {
-            binding?.tvValue?.setText("${binding?.tvValue?.text?.toString()?.toInt()?.plus(1)}")
+        binding?.btnMinus?.setOnClickListener {
+            binding?.tvValue?.text= (binding?.tvValue?.text.toString().toInt()-1).toString()
+            
+        }
+        binding?.btnPlus?.setOnClickListener{
+                binding?.tvValue?.text= (binding?.tvValue?.text.toString().toInt().plus(1)).toString()
         }
         binding?.btnOrder?.setOnClickListener {
-
+            binding?.tvValue?.text.toString().toInt()
         }
     }
     companion object {

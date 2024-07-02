@@ -26,8 +26,7 @@ class FirstFragment : Fragment() {
     private var param2: String? = null
     var binding:FragmentFirstBinding?=null
     var mainActivity: MainActivity?=null
-    var infoList = arrayListOf<Info>()
-    var listAdapter=ListAdapter(infoList)
+    lateinit var listAdapter:ListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity=activity as MainActivity
@@ -42,6 +41,7 @@ class FirstFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding=FragmentFirstBinding.inflate(layoutInflater)
+        listAdapter=ListAdapter(mainActivity!!.infoList)
         return binding?.root
         //return inflater.inflate(R.layout.fragment_first, container, false)
     }
@@ -62,7 +62,7 @@ class FirstFragment : Fragment() {
                 }else if (dialogBinding.etQty.text?.toString()?.trim().isNullOrEmpty()){
                     dialogBinding.etQty.error="Enter Quantity"
                 }else{
-                    infoList.add(Info(dialogBinding.etName.text.toString(),dialogBinding.etQty.text.toString().toInt()))
+                    mainActivity?.infoList?.add(Info(dialogBinding.etName.text.toString(),dialogBinding.etQty.text.toString().toInt()))
                     listAdapter.notifyDataSetChanged()
                     dialog.dismiss()
                 }

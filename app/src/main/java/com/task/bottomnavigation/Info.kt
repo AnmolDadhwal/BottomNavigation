@@ -5,6 +5,6 @@ data class Info(
     var number:Int?=0,
     ){
     override fun toString(): String {
-        return "$name $number"
+        return "$name"
     }
 }

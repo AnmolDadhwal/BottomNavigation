@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     private var binding:ActivityMainBinding?=null
     private var navController:NavController?=null
     var infoList = arrayListOf<Info>()
+    lateinit var listAdapter:ListAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

@@ -11,6 +11,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.task.bottomnavigation.databinding.FragmentFirstBinding
 import com.task.bottomnavigation.databinding.FragmentSecondBinding
+import kotlin.math.max
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,8 +30,7 @@ class SecondFragment : Fragment() {
     var binding: FragmentSecondBinding?=null
     var mainActivity: MainActivity?=null
     lateinit var spinnerAdapter: ArrayAdapter<Info>
-    val min=1
-    val max=binding?.tvValue?.text.toString()
+   // var max=binding?.spDynamic?.adapter.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity=activity as MainActivity
@@ -60,22 +60,31 @@ class SecondFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
+//                var maximum=mainActivity!!.infoList[position].number
                 binding?.tvValue?.setText("${mainActivity!!.infoList[position].number}")
+                binding?.btnOrder?.setOnClickListener {
+                    mainActivity!!.infoList[position].number= mainActivity!!.infoList[position].number?.minus(binding?.tvValue?.text.toString().toInt())
+                    mainActivity!!.listAdapter.notifyDataSetChanged()
+                }
+                binding?.btnMinus?.setOnClickListener {
+                    if ((binding?.tvValue?.text.toString().toInt()-1)<1){
+                        Toast.makeText(mainActivity,"Reached minimum limit",Toast.LENGTH_SHORT).show()
+                    }else{
+                        binding?.tvValue?.text= (binding?.tvValue?.text.toString().toInt()-1).toString()
+                    }
+                }
+                binding?.btnPlus?.setOnClickListener{
+                    if(binding?.tvValue?.text.toString().toInt()==mainActivity!!.infoList[position].number){
+                        Toast.makeText(mainActivity,"Reached maximum limit",Toast.LENGTH_SHORT).show()
+                    }else{
+                        binding?.tvValue?.text= (binding?.tvValue?.text.toString().toInt().plus(1)).toString()
+                    }
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
+
             }
-        }
-        binding?.btnMinus?.setOnClickListener {
-            binding?.tvValue?.text= (binding?.tvValue?.text.toString().toInt()-1).toString()
-            
-        }
-        binding?.btnPlus?.setOnClickListener{
-                binding?.tvValue?.text= (binding?.tvValue?.text.toString().toInt().plus(1)).toString()
-        }
-        binding?.btnOrder?.setOnClickListener {
-            binding?.tvValue?.text.toString().toInt()
         }
     }
     companion object {

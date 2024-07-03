@@ -63,8 +63,12 @@ class SecondFragment : Fragment() {
 //                var maximum=mainActivity!!.infoList[position].number
                 binding?.tvValue?.setText("${mainActivity!!.infoList[position].number}")
                 binding?.btnOrder?.setOnClickListener {
-                    mainActivity!!.infoList[position].number= mainActivity!!.infoList[position].number?.minus(binding?.tvValue?.text.toString().toInt())
-                    mainActivity!!.listAdapter.notifyDataSetChanged()
+                    if (mainActivity!!.infoList[position].number.toString().toInt()==0){
+                        Toast.makeText(mainActivity,"order full",Toast.LENGTH_SHORT).show()
+                    }else{
+                        mainActivity!!.infoList[position].number= mainActivity!!.infoList[position].number?.minus(binding?.tvValue?.text.toString().toInt())
+                        mainActivity!!.listAdapter.notifyDataSetChanged()
+                    }
                 }
                 binding?.btnMinus?.setOnClickListener {
                     if ((binding?.tvValue?.text.toString().toInt()-1)<1){
